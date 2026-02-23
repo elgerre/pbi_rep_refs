@@ -1,0 +1,4 @@
+relationship f4be7ee1-8d96-2350-9876-b24e5fc5cff0
+	fromColumn: pages.PageID
+	toColumn: 'Page Information'.PageID
+

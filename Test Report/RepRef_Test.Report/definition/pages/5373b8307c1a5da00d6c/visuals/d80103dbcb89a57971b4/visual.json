@@ -1,0 +1,196 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "d80103dbcb89a57971b4",
+  "position": {
+    "x": 240,
+    "y": 0,
+    "z": 1,
+    "height": 720,
+    "width": 1040,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "pages"
+                    }
+                  },
+                  "Property": "VisualID"
+                }
+              },
+              "queryRef": "pages.VisualID",
+              "nativeQueryRef": "VisualID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "pages"
+                    }
+                  },
+                  "Property": "Visual Type"
+                }
+              },
+              "queryRef": "pages.Visual Type",
+              "nativeQueryRef": "Visual Type"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "pages"
+                    }
+                  },
+                  "Property": "Visual Query Reference"
+                }
+              },
+              "queryRef": "pages.Visual Query Reference",
+              "nativeQueryRef": "Visual Query Reference"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "pages"
+                    }
+                  },
+                  "Property": "Visual Title"
+                }
+              },
+              "queryRef": "pages.Visual Title",
+              "nativeQueryRef": "Visual Title"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "pages"
+                    }
+                  },
+                  "Property": "Filter Config Source Entity"
+                }
+              },
+              "queryRef": "pages.Filter Config Source Entity",
+              "nativeQueryRef": "Filter Config Source Entity"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "pages"
+                    }
+                  },
+                  "Property": "Filter Config Column"
+                }
+              },
+              "queryRef": "pages.Filter Config Column",
+              "nativeQueryRef": "Filter Config Column"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "99ed6bd5801008b1391b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "pages"
+              }
+            },
+            "Property": "VisualID"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "7eb7be5905b425ce9705",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "pages"
+              }
+            },
+            "Property": "Visual Type"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "44e0cdac8a253128a521",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "pages"
+              }
+            },
+            "Property": "Visual Query Reference"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "2c55f46e17cc9088102d",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "pages"
+              }
+            },
+            "Property": "Visual Title"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "8c838d965a2bc9301a21",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "pages"
+              }
+            },
+            "Property": "Filter Config Source Entity"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "bfee4bfca20403768de4",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "pages"
+              }
+            },
+            "Property": "Filter Config Column"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

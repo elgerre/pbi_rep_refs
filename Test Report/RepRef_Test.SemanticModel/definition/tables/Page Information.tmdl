@@ -1,0 +1,40 @@
+table 'Page Information'
+	lineageTag: c089b47c-f3e3-451d-9809-9d40f8bdd9fb
+
+	column PageID
+		dataType: string
+		lineageTag: 0197ca73-d70e-46d8-8713-f65441f93011
+		summarizeBy: none
+		sourceColumn: PageID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Page Name'
+		dataType: string
+		lineageTag: 3082e2f9-73df-42ab-abd1-ff6c93014d3b
+		summarizeBy: none
+		sourceColumn: Page Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Page Information' = m
+		mode: import
+		source =
+				let
+				    Source = Folder.Files(ReportFilePath),
+				    #"Filtered Rows" = Table.SelectRows(Source, each ([Name] = "page.json")),
+				    #"Filtered Hidden Files1" = Table.SelectRows(#"Filtered Rows", each [Attributes]?[Hidden]? <> true),
+				    #"Invoke Custom Function1" = Table.AddColumn(#"Filtered Hidden Files1", "Transform File (2)", each #"Transform File (2)"([Content])),
+				    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Invoke Custom Function1", {"Transform File (2)"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Removed Errors", {"Name", "Source.Name"}),
+				    #"Removed Other Columns1" = Table.SelectColumns(#"Renamed Columns1", {"Source.Name", "Transform File (2)"}),
+				    #"Expanded Table Column1" = Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File (2)", Table.ColumnNames(#"Transform File (2)"(#"Sample File (2)"))),
+				    #"Renamed Columns" = Table.RenameColumns(#"Expanded Table Column1",{{"name", "PageID"}, {"displayName", "Page Name"}}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Renamed Columns",{"PageID", "Page Name"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

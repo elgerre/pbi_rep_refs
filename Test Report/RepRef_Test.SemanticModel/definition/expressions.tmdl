@@ -1,0 +1,126 @@
+expression Parameter1 = #"Sample File" meta [IsParameterQuery=true, BinaryIdentifier=#"Sample File", Type="Binary", IsParameterQueryRequired=true]
+	lineageTag: 293ae4f4-98c6-4cd7-9fa5-b8e7203f730d
+	queryGroup: 'Transform File from pages\Helper Queries'
+
+	annotation PBI_ResultType = Binary
+
+	annotation PBI_NavigationStepName = Navigation
+
+expression 'Sample File' =
+		let
+		    Source = Folder.Files(ReportFilePath),
+		    #"Filtered Rows" = Table.SelectRows(Source, each ([Name] = "visual.json")),
+		    Navigation1 = #"Filtered Rows"{0}[Content]
+		in
+		    Navigation1
+	lineageTag: d8c405bc-c02e-4cad-8c44-d7de3ea44e84
+	queryGroup: 'Transform File from pages\Helper Queries'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transform Sample File' =
+		let
+		    Source = Json.Document(Parameter1),
+		    #"Converted to Table" = Table.FromRecords({Source}),
+		    Custom1 = if not List.Contains(Table.ColumnNames(#"Converted to Table"), "filterConfig")
+		    then Table.AddColumn(#"Converted to Table", "filterConfig", each null, type text)
+		    else #"Converted to Table",
+		    Custom2 = if not List.Contains(Table.ColumnNames(Custom1), "visual")
+		    then Table.AddColumn(Custom1, "visual", each null, type text)
+		    else Custom1,
+		    #"Expanded visual1" = Table.ExpandRecordColumn(Custom2, "visual", {"visualType", "query", "visualContainerObjects", "drillFilterOtherVisuals"}, {"visual.visualType", "visual.query", "visual.visualContainerObjects", "visual.drillFilterOtherVisuals"})
+		in
+		    #"Expanded visual1"
+	lineageTag: 290cab42-cd3d-4fc8-9f76-12456804b711
+	queryGroup: 'Transform File from pages'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Transform File' =
+		(Parameter1 as binary) => let Source = Json.Document(Parameter1),
+		#"Converted to Table" = Table.FromRecords({Source}),
+		Custom1 = if not List.Contains(Table.ColumnNames(#"Converted to Table"), "filterConfig")
+		          then Table.AddColumn(#"Converted to Table", "filterConfig", each null, type text)
+		          else #"Converted to Table",
+		Custom2 = if not List.Contains(Table.ColumnNames(Custom1), "visual")
+		    then Table.AddColumn(Custom1, "visual", each null, type text)
+		    else Custom1,
+		#"Expanded visual1" = Table.ExpandRecordColumn(Custom2, "visual", {"visualType", "query", "visualContainerObjects", "drillFilterOtherVisuals"}, {"visual.visualType", "visual.query", "visual.visualContainerObjects", "visual.drillFilterOtherVisuals"})
+		
+		in
+		#"Expanded visual1"
+	lineageTag: a14b661c-4991-4ad4-b3e2-ef1c10d79348
+	queryGroup: 'Transform File from pages\Helper Queries'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+expression ReportFilePath = "C:\Users\RenéElgersma\Repos\Datamonsters\Report\Datamonsters.Report\definition\pages" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 7cc66c99-d90b-4a79-95ae-93c471ee5226
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+
+expression Parameter2 = #"Sample File (2)" meta [IsParameterQuery=true, BinaryIdentifier=#"Sample File (2)", Type="Binary", IsParameterQueryRequired=true]
+	lineageTag: 43010ca8-5eb4-492f-b4b0-b4b20945f8e9
+	queryGroup: 'Transform File from Page Information\Helper Queries (2)'
+
+	annotation PBI_ResultType = Binary
+
+	annotation PBI_NavigationStepName = Navigation
+
+expression 'Sample File (2)' =
+		let
+		    Source = Folder.Files(ReportFilePath),
+		    #"Filtered Rows" = Table.SelectRows(Source, each ([Name] = "page.json")),
+		    Navigation1 = #"Filtered Rows"{0}[Content]
+		in
+		    Navigation1
+	lineageTag: 0d1e8bc0-d608-469f-8da8-df4f8f990cb4
+	queryGroup: 'Transform File from Page Information\Helper Queries (2)'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transform Sample File (2)' =
+		let
+		    Source = Json.Document(Parameter2),
+		    #"Converted to Table" = Table.FromRecords({Source}),
+		    Custom1 = if not List.Contains(Table.ColumnNames(#"Converted to Table"), "displayName")
+		          then Table.AddColumn(#"Converted to Table", "displayName", each null, type text)
+		          else #"Converted to Table"
+		in
+		    Custom1
+	lineageTag: 216ff3bb-228f-433d-9fc2-6de6c429dc32
+	queryGroup: 'Transform File from Page Information'
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+
+expression 'Transform File (2)' =
+		let
+		    Source = (Parameter2 as binary) => let
+		        Source = Json.Document(Parameter2),
+		        #"Converted to Table" = Table.FromRecords({Source}),
+		        Custom1= if not List.Contains(Table.ColumnNames(#"Converted to Table"), "displayName")
+		          then Table.AddColumn(#"Converted to Table", "displayName", each null, type text)
+		          else #"Converted to Table"
+		    in
+		        Custom1
+		in
+		    Source
+	lineageTag: 9d87cee3-0954-4f74-93d1-592e33db97fe
+	queryGroup: 'Transform File from Page Information\Helper Queries (2)'
+
+	annotation PBI_ResultType = Function
+
+	annotation PBI_NavigationStepName = Navigation
+
