@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
-  "name": "cae56feb74d5d801b88e",
+  "name": "76c6aa637bd260a41058",
   "position": {
-    "x": 0,
+    "x": 352,
     "y": 0,
-    "z": 0,
-    "height": 288,
-    "width": 368,
-    "tabOrder": 0
+    "z": 3,
+    "height": 704,
+    "width": 320,
+    "tabOrder": 3
   },
   "visual": {
     "visualType": "tableEx",
@@ -23,11 +23,11 @@
                       "Entity": "CombinedTable"
                     }
                   },
-                  "Property": "Columns Source Ref"
+                  "Property": "Measures Source Ref"
                 }
               },
-              "queryRef": "CombinedTable.Columns Source Ref",
-              "nativeQueryRef": "Columns Source Ref"
+              "queryRef": "CombinedTable.Measures Source Ref",
+              "nativeQueryRef": "Measures Source Ref"
             }
           ]
         }

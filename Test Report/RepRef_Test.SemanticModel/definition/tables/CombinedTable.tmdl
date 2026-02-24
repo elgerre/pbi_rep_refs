@@ -1,0 +1,87 @@
+table CombinedTable
+	lineageTag: 42966f38-75a3-42bc-b39c-0f2a89264a2e
+
+	column VisualID
+		dataType: string
+		lineageTag: 79b0999f-ff90-499d-b867-9a6aec099e31
+		summarizeBy: none
+		sourceColumn: VisualID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Visual Type'
+		dataType: string
+		lineageTag: a893a8d6-1da7-48cb-a03f-2ccd0bac3b80
+		summarizeBy: none
+		sourceColumn: Visual Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Columns Source Ref'
+		dataType: string
+		lineageTag: 00231bdb-6e8f-4923-a129-8bcf67a8ebaf
+		summarizeBy: none
+		sourceColumn: Columns Source Ref
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rows Source Ref'
+		dataType: string
+		lineageTag: 4d498e15-2d09-4289-b3c8-2fde2513844b
+		summarizeBy: none
+		sourceColumn: Rows Source Ref
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Measures Source Ref'
+		dataType: string
+		lineageTag: 7c8aafb4-4229-40ac-be57-bf1f20f9bd97
+		summarizeBy: none
+		sourceColumn: Measures Source Ref
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Visual Title'
+		dataType: string
+		lineageTag: ce8d868d-4122-45bc-8965-cd989d485b03
+		summarizeBy: none
+		sourceColumn: Visual Title
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Filter Config Table Source'
+		dataType: string
+		lineageTag: 93dce956-3aac-4dbb-ac22-58cd175cbf47
+		summarizeBy: none
+		sourceColumn: Filter Config Table Source
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Filter Config Table Source Column'
+		dataType: string
+		lineageTag: d52e3111-0500-410f-8cbf-f7a324cf792e
+		summarizeBy: none
+		sourceColumn: Filter Config Table Source Column
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Folder Path'
+		dataType: string
+		lineageTag: f6c3b1f1-39f7-4ddb-a871-bb21bee3d8ae
+		summarizeBy: none
+		sourceColumn: Folder Path
+
+		annotation SummarizationSetBy = Automatic
+
+	partition CombinedTable = m
+		mode: import
+		source =
+				let
+				    Source = Table.Combine({pivotTables, slicer, card, cardVisual})
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

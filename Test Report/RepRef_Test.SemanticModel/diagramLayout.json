@@ -10,8 +10,8 @@
       "nodes": [
         {
           "location": {
-            "x": 1042.0623485118656,
-            "y": 172.43258703445554
+            "x": 1,
+            "y": 79.365174068911074
           },
           "nodeIndex": "Page Information",
           "nodeLineageTag": "c089b47c-f3e3-451d-9809-9d40f8bdd9fb",
@@ -23,8 +23,8 @@
         },
         {
           "location": {
-            "x": 546.83205946135138,
-            "y": 131.86517406891107
+            "x": 338.83205946135138,
+            "y": 62.797761103366611
           },
           "nodeIndex": "pages",
           "nodeLineageTag": "22783f47-d700-4fcc-a2f6-c770b1d0d024",
@@ -36,16 +36,16 @@
         },
         {
           "location": {
-            "x": 1624.0623485118656,
-            "y": 134.43258703445554
+            "x": 634.23028905051422,
+            "y": 394.21629351722777
           },
-          "nodeIndex": "Pages Overview",
-          "nodeLineageTag": "8422404c-8491-40ec-8921-5f656030bc76",
+          "nodeIndex": "CombinedTable",
+          "nodeLineageTag": "42966f38-75a3-42bc-b39c-0f2a89264a2e",
           "size": {
-            "height": 224,
+            "height": 296,
             "width": 234
           },
-          "zIndex": 1
+          "zIndex": 0
         }
       ],
       "name": "All tables",

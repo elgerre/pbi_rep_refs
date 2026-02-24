@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "pages"
+                      "Entity": "CombinedTable"
                     }
                   },
                   "Property": "VisualID"
                 }
               },
-              "queryRef": "pages.VisualID",
+              "queryRef": "CombinedTable.VisualID",
               "nativeQueryRef": "VisualID"
             },
             {
@@ -34,13 +34,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "pages"
+                      "Entity": "CombinedTable"
                     }
                   },
                   "Property": "Visual Type"
                 }
               },
-              "queryRef": "pages.Visual Type",
+              "queryRef": "CombinedTable.Visual Type",
               "nativeQueryRef": "Visual Type"
             },
             {
@@ -48,27 +48,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "pages"
-                    }
-                  },
-                  "Property": "Visual Query Reference"
-                }
-              },
-              "queryRef": "pages.Visual Query Reference",
-              "nativeQueryRef": "Visual Query Reference"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "pages"
+                      "Entity": "CombinedTable"
                     }
                   },
                   "Property": "Visual Title"
                 }
               },
-              "queryRef": "pages.Visual Title",
+              "queryRef": "CombinedTable.Visual Title",
               "nativeQueryRef": "Visual Title"
             },
             {
@@ -76,121 +62,75 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "pages"
+                      "Entity": "CombinedTable"
                     }
                   },
-                  "Property": "Filter Config Source Entity"
+                  "Property": "Rows Source Ref"
                 }
               },
-              "queryRef": "pages.Filter Config Source Entity",
-              "nativeQueryRef": "Filter Config Source Entity"
+              "queryRef": "CombinedTable.Rows Source Ref",
+              "nativeQueryRef": "Rows Source Ref"
             },
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "pages"
+                      "Entity": "CombinedTable"
                     }
                   },
-                  "Property": "Filter Config Column"
+                  "Property": "Columns Source Ref"
                 }
               },
-              "queryRef": "pages.Filter Config Column",
-              "nativeQueryRef": "Filter Config Column"
+              "queryRef": "CombinedTable.Columns Source Ref",
+              "nativeQueryRef": "Columns Source Ref"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CombinedTable"
+                    }
+                  },
+                  "Property": "Measures Source Ref"
+                }
+              },
+              "queryRef": "CombinedTable.Measures Source Ref",
+              "nativeQueryRef": "Measures Source Ref"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CombinedTable"
+                    }
+                  },
+                  "Property": "Filter Config Table Source"
+                }
+              },
+              "queryRef": "CombinedTable.Filter Config Table Source",
+              "nativeQueryRef": "Filter Config Table Source"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CombinedTable"
+                    }
+                  },
+                  "Property": "Filter Config Table Source Column"
+                }
+              },
+              "queryRef": "CombinedTable.Filter Config Table Source Column",
+              "nativeQueryRef": "Filter Config Table Source Column"
             }
           ]
         }
       }
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "99ed6bd5801008b1391b",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "pages"
-              }
-            },
-            "Property": "VisualID"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "7eb7be5905b425ce9705",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "pages"
-              }
-            },
-            "Property": "Visual Type"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "44e0cdac8a253128a521",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "pages"
-              }
-            },
-            "Property": "Visual Query Reference"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "2c55f46e17cc9088102d",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "pages"
-              }
-            },
-            "Property": "Visual Title"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "8c838d965a2bc9301a21",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "pages"
-              }
-            },
-            "Property": "Filter Config Source Entity"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "bfee4bfca20403768de4",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "pages"
-              }
-            },
-            "Property": "Filter Config Column"
-          }
-        },
-        "type": "Categorical"
-      }
-    ]
   }
 }

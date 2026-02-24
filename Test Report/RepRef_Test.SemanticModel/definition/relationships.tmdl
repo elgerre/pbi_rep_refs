@@ -2,3 +2,9 @@ relationship f4be7ee1-8d96-2350-9876-b24e5fc5cff0
 	fromColumn: pages.PageID
 	toColumn: 'Page Information'.PageID
 
+relationship f2992f27-29cd-c86c-fa7a-30854a8fbd3c
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: CombinedTable.VisualID
+	toColumn: pages.VisualID
+

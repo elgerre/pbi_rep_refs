@@ -24,12 +24,13 @@ queryGroup 'Transform File from Page Information\Helper Queries (2)'
 
 annotation __PBI_TimeIntelligenceEnabled = 1
 
-annotation PBI_QueryOrder = ["pages","Page Information","Sample File","Parameter1","Transform Sample File","Transform File","ReportFilePath","Sample File (2)","Parameter2","Transform Sample File (2)","Transform File (2)"]
+annotation PBI_QueryOrder = ["pages","Page Information","Sample File","Parameter1","Transform Sample File","Transform File","ReportFilePath","Sample File (2)","Parameter2","Transform Sample File (2)","Transform File (2)","pivotTables","slicer","card","cardVisual","CombinedTable"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
 ref table pages
 ref table 'Page Information'
+ref table CombinedTable
 
 ref cultureInfo en-US
 

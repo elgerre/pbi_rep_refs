@@ -124,3 +124,238 @@ expression 'Transform File (2)' =
 
 	annotation PBI_NavigationStepName = Navigation
 
+expression pivotTables =
+		let
+		    Source = Folder.Files(ReportFilePath),
+		    #"Filtered Rows" = Table.SelectRows(Source, each ([Name] = "visual.json")),
+		    #"Filtered Hidden Files1" = Table.SelectRows(#"Filtered Rows", each [Attributes]?[Hidden]? <> true),
+		    #"Invoke Custom Function1" = Table.AddColumn(#"Filtered Hidden Files1", "Transform File", each #"Transform File"([Content])),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Invoke Custom Function1", {"Name", "Source.Name"}),
+		    #"Removed Other Columns1" = Table.SelectColumns(#"Renamed Columns1", {"Source.Name", "Transform File","Folder Path"}),
+		    #"Expanded Table Column1" = Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File", Table.ColumnNames(#"Transform File"(#"Sample File"))),
+		    #"Expanded filterConfig" = Table.ExpandRecordColumn(#"Expanded Table Column1", "filterConfig", {"filters"}, {"filterConfig.filters"}),
+		    #"Expanded filterConfig.filters" = Table.ExpandListColumn(#"Expanded filterConfig", "filterConfig.filters"),
+		    #"Expanded filterConfig.filters1" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters", "filterConfig.filters", {"name", "field", "filter"}, {"filterConfig.filters.name", "filterConfig.filters.field", "filterConfig.filters.filter"}),
+		    #"Expanded filterConfig.filters.field" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters1", "filterConfig.filters.field", {"Column"}, {"filterConfig.filters.field.Column"}),
+		    #"Expanded filterConfig.filters.field.Column" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field", "filterConfig.filters.field.Column", {"Expression", "Property"}, {"filterConfig.filters.field.Column.Expression", "filterConfig.filters.field.Column.Property"}),
+		    #"Expanded filterConfig.filters.field.Column.Expression" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field.Column", "filterConfig.filters.field.Column.Expression", {"SourceRef"}, {"filterConfig.filters.field.Column.Expression.SourceRef"}),
+		    #"Expanded filterConfig.filters.field.Column.Expression.SourceRef" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field.Column.Expression", "filterConfig.filters.field.Column.Expression.SourceRef", {"Entity"}, {"filterConfig.filters.field.Column.Expression.SourceRef.Entity"}),
+		    #"Removed Columns" = Table.RemoveColumns(#"Expanded filterConfig.filters.field.Column.Expression.SourceRef",{"filterConfig.filters.filter", "$schema"}),
+		    #"Expanded visual.visualContainerObjects" = Table.ExpandRecordColumn(#"Removed Columns", "visual.visualContainerObjects", {"title"}, {"visual.visualContainerObjects.title"}),
+		    #"Expanded visual.visualContainerObjects.title" = Table.ExpandListColumn(#"Expanded visual.visualContainerObjects", "visual.visualContainerObjects.title"),
+		    #"Expanded visual.visualContainerObjects.title1" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title", "visual.visualContainerObjects.title", {"properties"}, {"visual.visualContainerObjects.title.properties"}),
+		    #"Expanded visual.visualContainerObjects.title.properties" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title1", "visual.visualContainerObjects.title.properties", {"show", "text"}, {"visual.visualContainerObjects.title.properties.show", "visual.visualContainerObjects.title.properties.text"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties", "visual.visualContainerObjects.title.properties.show", {"expr"}, {"visual.visualContainerObjects.title.properties.show.expr"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show", "visual.visualContainerObjects.title.properties.text", {"expr"}, {"visual.visualContainerObjects.title.properties.text.expr"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text.expr" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text", "visual.visualContainerObjects.title.properties.text.expr", {"Literal"}, {"visual.visualContainerObjects.title.properties.text.expr.Literal"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show.expr" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text.expr", "visual.visualContainerObjects.title.properties.show.expr", {"Literal"}, {"visual.visualContainerObjects.title.properties.show.expr.Literal"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show.expr.Literal" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show.expr", "visual.visualContainerObjects.title.properties.show.expr.Literal", {"Value"}, {"visual.visualContainerObjects.title.properties.show.expr.Literal.Value"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text.expr.Literal" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show.expr.Literal", "visual.visualContainerObjects.title.properties.text.expr.Literal", {"Value"}, {"visual.visualContainerObjects.title.properties.text.expr.Literal.Value"}),
+		    #"Expanded visual.query" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text.expr.Literal", "visual.query", {"queryState"}, {"visual.query.queryState"}),
+		    #"Filtered Rows1" = Table.SelectRows(#"Expanded visual.query", each ([visual.visualType] = "pivotTable")),
+		    #"Expanded visual.query.queryState" = Table.ExpandRecordColumn(#"Filtered Rows1", "visual.query.queryState", {"Columns", "Rows", "Values"}, {"visual.query.queryState.Columns", "visual.query.queryState.Rows", "visual.query.queryState.Values"}),
+		    #"Expanded visual.query.queryState.Columns" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState", "visual.query.queryState.Columns", {"projections"}, {"visual.query.queryState.Columns.projections"}),
+		    #"Expanded visual.query.queryState.Rows" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Columns", "visual.query.queryState.Rows", {"projections"}, {"visual.query.queryState.Rows.projections"}),
+		    #"Expanded visual.query.queryState.Values" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Rows", "visual.query.queryState.Values", {"projections"}, {"visual.query.queryState.Values.projections"}),
+		    #"Expanded visual.query.queryState.Columns.projections" = Table.ExpandListColumn(#"Expanded visual.query.queryState.Values", "visual.query.queryState.Columns.projections"),
+		    #"Expanded visual.query.queryState.Rows.projections" = Table.ExpandListColumn(#"Expanded visual.query.queryState.Columns.projections", "visual.query.queryState.Rows.projections"),
+		    #"Expanded visual.query.queryState.Values.projections" = Table.ExpandListColumn(#"Expanded visual.query.queryState.Rows.projections", "visual.query.queryState.Values.projections"),
+		    #"Expanded visual.query.queryState.Columns.projections1" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections", "visual.query.queryState.Columns.projections", {"field", "queryRef", "nativeQueryRef", "active"}, {"visual.query.queryState.Columns.projections.field", "visual.query.queryState.Columns.projections.queryRef", "visual.query.queryState.Columns.projections.nativeQueryRef", "visual.query.queryState.Columns.projections.active"}),
+		    #"Expanded visual.query.queryState.Rows.projections1" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Columns.projections1", "visual.query.queryState.Rows.projections", {"field", "queryRef", "nativeQueryRef", "active"}, {"visual.query.queryState.Rows.projections.field", "visual.query.queryState.Rows.projections.queryRef", "visual.query.queryState.Rows.projections.nativeQueryRef", "visual.query.queryState.Rows.projections.active"}),
+		    #"Expanded visual.query.queryState.Columns.projections.field" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Rows.projections1", "visual.query.queryState.Columns.projections.field", {"Column"}, {"visual.query.queryState.Columns.projections.field.Column"}),
+		    #"Expanded visual.query.queryState.Columns.projections.field.Column" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Columns.projections.field", "visual.query.queryState.Columns.projections.field.Column", {"Expression", "Property"}, {"visual.query.queryState.Columns.projections.field.Column.Expression", "visual.query.queryState.Columns.projections.field.Column.Property"}),
+		    #"Expanded visual.query.queryState.Columns.projections.field.Column.Expression" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Columns.projections.field.Column", "visual.query.queryState.Columns.projections.field.Column.Expression", {"SourceRef"}, {"visual.query.queryState.Columns.projections.field.Column.Expression.SourceRef"}),
+		    #"Expanded visual.query.queryState.Columns.projections.field.Column.Expression.SourceRef" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Columns.projections.field.Column.Expression", "visual.query.queryState.Columns.projections.field.Column.Expression.SourceRef", {"Entity"}, {"visual.query.queryState.Columns.projections.field.Column.Expression.SourceRef.En"}),
+		    #"Expanded visual.query.queryState.Rows.projections.field" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Columns.projections.field.Column.Expression.SourceRef", "visual.query.queryState.Rows.projections.field", {"Column"}, {"visual.query.queryState.Rows.projections.field.Column"}),
+		    #"Expanded visual.query.queryState.Rows.projections.field.Column" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Rows.projections.field", "visual.query.queryState.Rows.projections.field.Column", {"Expression", "Property"}, {"visual.query.queryState.Rows.projections.field.Column.Expression", "visual.query.queryState.Rows.projections.field.Column.Property"}),
+		    #"Expanded visual.query.queryState.Rows.projections.field.Column.Expression" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Rows.projections.field.Column", "visual.query.queryState.Rows.projections.field.Column.Expression", {"SourceRef"}, {"visual.query.queryState.Rows.projections.field.Column.Expression.SourceRef"}),
+		    #"Expanded visual.query.queryState.Rows.projections.field.Column.Expression.SourceRef" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Rows.projections.field.Column.Expression", "visual.query.queryState.Rows.projections.field.Column.Expression.SourceRef", {"Entity"}, {"visual.query.queryState.Rows.projections.field.Column.Expression.SourceRef.Entit"}),
+		    #"Expanded visual.query.queryState.Values.projections1" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Rows.projections.field.Column.Expression.SourceRef", "visual.query.queryState.Values.projections", {"field", "queryRef", "nativeQueryRef"}, {"visual.query.queryState.Values.projections.field", "visual.query.queryState.Values.projections.queryRef", "visual.query.queryState.Values.projections.nativeQueryRef"}),
+		    #"Expanded visual.query.queryState.Values.projections.field" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections1", "visual.query.queryState.Values.projections.field", {"Measure"}, {"visual.query.queryState.Values.projections.field.Measure"}),
+		    #"Expanded visual.query.queryState.Values.projections.field.Measure" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections.field", "visual.query.queryState.Values.projections.field.Measure", {"Expression", "Property"}, {"visual.query.queryState.Values.projections.field.Measure.Expression", "visual.query.queryState.Values.projections.field.Measure.Property"}),
+		    #"Expanded visual.query.queryState.Values.projections.field.Measure.Expression" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections.field.Measure", "visual.query.queryState.Values.projections.field.Measure.Expression", {"SourceRef"}, {"visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef"}),
+		    #"Expanded visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections.field.Measure.Expression", "visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef", {"Entity"}, {"visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef.En"}),
+		    #"Removed Columns1" = Table.RemoveColumns(#"Expanded visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef",{"Source.Name", "position"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns1",{{"name", "Visual ID"}, {"visual.visualType", "Visual Type"}, {"visual.query.queryState.Columns.projections.field.Column.Expression.SourceRef.En", "Columns Source Table"}, {"visual.query.queryState.Columns.projections.field.Column.Property", "Columns Field"}}),
+		    #"Removed Columns2" = Table.RemoveColumns(#"Renamed Columns",{"Columns Source Table", "Columns Field"}),
+		    #"Renamed Columns2" = Table.RenameColumns(#"Removed Columns2",{{"visual.query.queryState.Columns.projections.queryRef", "Columns Source Ref"}}),
+		    #"Removed Columns3" = Table.RemoveColumns(#"Renamed Columns2",{"visual.query.queryState.Columns.projections.nativeQueryRef", "visual.query.queryState.Columns.projections.active", "visual.query.queryState.Rows.projections.field.Column.Expression.SourceRef.Entit", "visual.query.queryState.Rows.projections.field.Column.Property"}),
+		    #"Renamed Columns3" = Table.RenameColumns(#"Removed Columns3",{{"visual.query.queryState.Rows.projections.queryRef", "Rows Source Ref"}}),
+		    #"Removed Columns4" = Table.RemoveColumns(#"Renamed Columns3",{"visual.query.queryState.Rows.projections.nativeQueryRef", "visual.query.queryState.Rows.projections.active", "visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef.En", "visual.query.queryState.Values.projections.field.Measure.Property"}),
+		    #"Renamed Columns4" = Table.RenameColumns(#"Removed Columns4",{{"visual.query.queryState.Values.projections.queryRef", "Measures"}}),
+		    #"Removed Columns5" = Table.RemoveColumns(#"Renamed Columns4",{"visual.query.queryState.Values.projections.nativeQueryRef", "visual.visualContainerObjects.title.properties.show.expr.Literal.Value"}),
+		    #"Renamed Columns5" = Table.RenameColumns(#"Removed Columns5",{{"visual.visualContainerObjects.title.properties.text.expr.Literal.Value", "Visual Title"}}),
+		    #"Removed Columns6" = Table.RemoveColumns(#"Renamed Columns5",{"visual.drillFilterOtherVisuals", "filterConfig.filters.name"}),
+		    #"Renamed Columns6" = Table.RenameColumns(#"Removed Columns6",{{"filterConfig.filters.field.Column.Expression.SourceRef.Entity", "Filter Config Table Source"}, {"filterConfig.filters.field.Column.Property", "Filter Config Table Source Column"}, {"Measures", "Measures Source Ref"}, {"Visual ID", "VisualID"}})
+		in
+		    #"Renamed Columns6"
+	lineageTag: b8834373-0c41-4f4e-9724-ee8dabd3d127
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression slicer =
+		let
+		    Source = Folder.Files(ReportFilePath),
+		    #"Filtered Rows" = Table.SelectRows(Source, each ([Name] = "visual.json")),
+		    #"Filtered Hidden Files1" = Table.SelectRows(#"Filtered Rows", each [Attributes]?[Hidden]? <> true),
+		    #"Invoke Custom Function1" = Table.AddColumn(#"Filtered Hidden Files1", "Transform File", each #"Transform File"([Content])),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Invoke Custom Function1", {"Name", "Source.Name"}),
+		    #"Removed Other Columns1" = Table.SelectColumns(#"Renamed Columns1", {"Source.Name", "Transform File","Folder Path"}),
+		    #"Expanded Table Column1" = Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File", Table.ColumnNames(#"Transform File"(#"Sample File"))),
+		    #"Expanded filterConfig" = Table.ExpandRecordColumn(#"Expanded Table Column1", "filterConfig", {"filters"}, {"filterConfig.filters"}),
+		    #"Expanded filterConfig.filters" = Table.ExpandListColumn(#"Expanded filterConfig", "filterConfig.filters"),
+		    #"Expanded filterConfig.filters1" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters", "filterConfig.filters", {"name", "field", "filter"}, {"filterConfig.filters.name", "filterConfig.filters.field", "filterConfig.filters.filter"}),
+		    #"Expanded filterConfig.filters.field" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters1", "filterConfig.filters.field", {"Column"}, {"filterConfig.filters.field.Column"}),
+		    #"Expanded filterConfig.filters.field.Column" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field", "filterConfig.filters.field.Column", {"Expression", "Property"}, {"filterConfig.filters.field.Column.Expression", "filterConfig.filters.field.Column.Property"}),
+		    #"Expanded filterConfig.filters.field.Column.Expression" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field.Column", "filterConfig.filters.field.Column.Expression", {"SourceRef"}, {"filterConfig.filters.field.Column.Expression.SourceRef"}),
+		    #"Expanded filterConfig.filters.field.Column.Expression.SourceRef" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field.Column.Expression", "filterConfig.filters.field.Column.Expression.SourceRef", {"Entity"}, {"filterConfig.filters.field.Column.Expression.SourceRef.Entity"}),
+		    #"Removed Columns" = Table.RemoveColumns(#"Expanded filterConfig.filters.field.Column.Expression.SourceRef",{"filterConfig.filters.filter", "$schema"}),
+		    #"Expanded visual.visualContainerObjects" = Table.ExpandRecordColumn(#"Removed Columns", "visual.visualContainerObjects", {"title"}, {"visual.visualContainerObjects.title"}),
+		    #"Expanded visual.visualContainerObjects.title" = Table.ExpandListColumn(#"Expanded visual.visualContainerObjects", "visual.visualContainerObjects.title"),
+		    #"Expanded visual.visualContainerObjects.title1" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title", "visual.visualContainerObjects.title", {"properties"}, {"visual.visualContainerObjects.title.properties"}),
+		    #"Expanded visual.visualContainerObjects.title.properties" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title1", "visual.visualContainerObjects.title.properties", {"show", "text"}, {"visual.visualContainerObjects.title.properties.show", "visual.visualContainerObjects.title.properties.text"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties", "visual.visualContainerObjects.title.properties.show", {"expr"}, {"visual.visualContainerObjects.title.properties.show.expr"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show", "visual.visualContainerObjects.title.properties.text", {"expr"}, {"visual.visualContainerObjects.title.properties.text.expr"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text.expr" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text", "visual.visualContainerObjects.title.properties.text.expr", {"Literal"}, {"visual.visualContainerObjects.title.properties.text.expr.Literal"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show.expr" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text.expr", "visual.visualContainerObjects.title.properties.show.expr", {"Literal"}, {"visual.visualContainerObjects.title.properties.show.expr.Literal"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show.expr.Literal" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show.expr", "visual.visualContainerObjects.title.properties.show.expr.Literal", {"Value"}, {"visual.visualContainerObjects.title.properties.show.expr.Literal.Value"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text.expr.Literal" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show.expr.Literal", "visual.visualContainerObjects.title.properties.text.expr.Literal", {"Value"}, {"visual.visualContainerObjects.title.properties.text.expr.Literal.Value"}),
+		    #"Expanded visual.query" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text.expr.Literal", "visual.query", {"queryState"}, {"visual.query.queryState"}),
+		    #"Filtered Rows1" = Table.SelectRows(#"Expanded visual.query", each ([visual.visualType] = "slicer")),
+		    #"Removed Columns1" = Table.RemoveColumns(#"Filtered Rows1",{"Source.Name", "position"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns1",{{"name", "VisualID"}}),
+		    #"Expanded visual.query.queryState" = Table.ExpandRecordColumn(#"Renamed Columns", "visual.query.queryState", {"Values"}, {"visual.query.queryState.Values"}),
+		    #"Expanded visual.query.queryState.Values" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState", "visual.query.queryState.Values", {"projections"}, {"visual.query.queryState.Values.projections"}),
+		    #"Expanded visual.query.queryState.Values.projections" = Table.ExpandListColumn(#"Expanded visual.query.queryState.Values", "visual.query.queryState.Values.projections"),
+		    #"Expanded visual.query.queryState.Values.projections1" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections", "visual.query.queryState.Values.projections", {"field", "queryRef", "nativeQueryRef", "active"}, {"visual.query.queryState.Values.projections.field", "visual.query.queryState.Values.projections.queryRef", "visual.query.queryState.Values.projections.nativeQueryRef", "visual.query.queryState.Values.projections.active"}),
+		    #"Expanded visual.query.queryState.Values.projections.field" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections1", "visual.query.queryState.Values.projections.field", {"Column"}, {"visual.query.queryState.Values.projections.field.Column"}),
+		    #"Expanded visual.query.queryState.Values.projections.field.Column" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections.field", "visual.query.queryState.Values.projections.field.Column", {"Expression", "Property"}, {"visual.query.queryState.Values.projections.field.Column.Expression", "visual.query.queryState.Values.projections.field.Column.Property"}),
+		    #"Expanded visual.query.queryState.Values.projections.field.Column.Expression" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections.field.Column", "visual.query.queryState.Values.projections.field.Column.Expression", {"SourceRef"}, {"visual.query.queryState.Values.projections.field.Column.Expression.SourceRef"}),
+		    #"Expanded visual.query.queryState.Values.projections.field.Column.Expression.SourceRef" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections.field.Column.Expression", "visual.query.queryState.Values.projections.field.Column.Expression.SourceRef", {"Entity"}, {"visual.query.queryState.Values.projections.field.Column.Expression.SourceRef.Ent"}),
+		    #"Renamed Columns2" = Table.RenameColumns(#"Expanded visual.query.queryState.Values.projections.field.Column.Expression.SourceRef",{{"visual.visualType", "Visual Type"}}),
+		    #"Removed Columns2" = Table.RemoveColumns(#"Renamed Columns2",{"visual.query.queryState.Values.projections.active", "visual.visualContainerObjects.title.properties.show.expr.Literal.Value"}),
+		    #"Renamed Columns3" = Table.RenameColumns(#"Removed Columns2",{{"visual.visualContainerObjects.title.properties.text.expr.Literal.Value", "Visual Title"}}),
+		    #"Removed Columns3" = Table.RemoveColumns(#"Renamed Columns3",{"visual.drillFilterOtherVisuals", "filterConfig.filters.name"}),
+		    #"Renamed Columns4" = Table.RenameColumns(#"Removed Columns3",{{"filterConfig.filters.field.Column.Expression.SourceRef.Entity", "Filter Config Table Source"}, {"filterConfig.filters.field.Column.Property", "Filter Config Table Source Column"}}),
+		    #"Removed Columns4" = Table.RemoveColumns(#"Renamed Columns4",{"visual.query.queryState.Values.projections.field.Column.Expression.SourceRef.Ent", "visual.query.queryState.Values.projections.field.Column.Property"}),
+		    #"Renamed Columns5" = Table.RenameColumns(#"Removed Columns4",{{"visual.query.queryState.Values.projections.queryRef", "Columns Source Ref"}}),
+		    #"Removed Columns5" = Table.RemoveColumns(#"Renamed Columns5",{"visual.query.queryState.Values.projections.nativeQueryRef"})
+		in
+		    #"Removed Columns5"
+	lineageTag: 1d8a5700-054f-4f6a-9e63-58af71c58ac7
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression card =
+		let
+		    Source = Folder.Files(ReportFilePath),
+		    #"Filtered Rows" = Table.SelectRows(Source, each ([Name] = "visual.json")),
+		    #"Filtered Hidden Files1" = Table.SelectRows(#"Filtered Rows", each [Attributes]?[Hidden]? <> true),
+		    #"Invoke Custom Function1" = Table.AddColumn(#"Filtered Hidden Files1", "Transform File", each #"Transform File"([Content])),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Invoke Custom Function1", {"Name", "Source.Name"}),
+		    #"Removed Other Columns1" = Table.SelectColumns(#"Renamed Columns1", {"Source.Name", "Transform File","Folder Path"}),
+		    #"Expanded Table Column1" = Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File", Table.ColumnNames(#"Transform File"(#"Sample File"))),
+		    #"Expanded filterConfig" = Table.ExpandRecordColumn(#"Expanded Table Column1", "filterConfig", {"filters"}, {"filterConfig.filters"}),
+		    #"Expanded filterConfig.filters" = Table.ExpandListColumn(#"Expanded filterConfig", "filterConfig.filters"),
+		    #"Expanded filterConfig.filters1" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters", "filterConfig.filters", {"name", "field", "filter"}, {"filterConfig.filters.name", "filterConfig.filters.field", "filterConfig.filters.filter"}),
+		    #"Expanded filterConfig.filters.field" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters1", "filterConfig.filters.field", {"Column"}, {"filterConfig.filters.field.Column"}),
+		    #"Expanded filterConfig.filters.field.Column" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field", "filterConfig.filters.field.Column", {"Expression", "Property"}, {"filterConfig.filters.field.Column.Expression", "filterConfig.filters.field.Column.Property"}),
+		    #"Expanded filterConfig.filters.field.Column.Expression" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field.Column", "filterConfig.filters.field.Column.Expression", {"SourceRef"}, {"filterConfig.filters.field.Column.Expression.SourceRef"}),
+		    #"Expanded filterConfig.filters.field.Column.Expression.SourceRef" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field.Column.Expression", "filterConfig.filters.field.Column.Expression.SourceRef", {"Entity"}, {"filterConfig.filters.field.Column.Expression.SourceRef.Entity"}),
+		    #"Removed Columns" = Table.RemoveColumns(#"Expanded filterConfig.filters.field.Column.Expression.SourceRef",{"filterConfig.filters.filter", "$schema"}),
+		    #"Expanded visual.visualContainerObjects" = Table.ExpandRecordColumn(#"Removed Columns", "visual.visualContainerObjects", {"title"}, {"visual.visualContainerObjects.title"}),
+		    #"Expanded visual.visualContainerObjects.title" = Table.ExpandListColumn(#"Expanded visual.visualContainerObjects", "visual.visualContainerObjects.title"),
+		    #"Expanded visual.visualContainerObjects.title1" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title", "visual.visualContainerObjects.title", {"properties"}, {"visual.visualContainerObjects.title.properties"}),
+		    #"Expanded visual.visualContainerObjects.title.properties" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title1", "visual.visualContainerObjects.title.properties", {"show", "text"}, {"visual.visualContainerObjects.title.properties.show", "visual.visualContainerObjects.title.properties.text"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties", "visual.visualContainerObjects.title.properties.show", {"expr"}, {"visual.visualContainerObjects.title.properties.show.expr"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show", "visual.visualContainerObjects.title.properties.text", {"expr"}, {"visual.visualContainerObjects.title.properties.text.expr"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text.expr" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text", "visual.visualContainerObjects.title.properties.text.expr", {"Literal"}, {"visual.visualContainerObjects.title.properties.text.expr.Literal"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show.expr" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text.expr", "visual.visualContainerObjects.title.properties.show.expr", {"Literal"}, {"visual.visualContainerObjects.title.properties.show.expr.Literal"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show.expr.Literal" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show.expr", "visual.visualContainerObjects.title.properties.show.expr.Literal", {"Value"}, {"visual.visualContainerObjects.title.properties.show.expr.Literal.Value"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text.expr.Literal" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show.expr.Literal", "visual.visualContainerObjects.title.properties.text.expr.Literal", {"Value"}, {"visual.visualContainerObjects.title.properties.text.expr.Literal.Value"}),
+		    #"Expanded visual.query" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text.expr.Literal", "visual.query", {"queryState"}, {"visual.query.queryState"}),
+		    #"Filtered Rows1" = Table.SelectRows(#"Expanded visual.query", each ([visual.visualType] = "card")),
+		    #"Removed Columns1" = Table.RemoveColumns(#"Filtered Rows1",{"Source.Name"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns1",{{"name", "VisualID"}}),
+		    #"Removed Columns2" = Table.RemoveColumns(#"Renamed Columns",{"position"}),
+		    #"Renamed Columns2" = Table.RenameColumns(#"Removed Columns2",{{"visual.visualType", "VisualType"}}),
+		    #"Expanded visual.query.queryState" = Table.ExpandRecordColumn(#"Renamed Columns2", "visual.query.queryState", {"Values"}, {"visual.query.queryState.Values"}),
+		    #"Expanded visual.query.queryState.Values" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState", "visual.query.queryState.Values", {"projections"}, {"visual.query.queryState.Values.projections"}),
+		    #"Expanded visual.query.queryState.Values.projections" = Table.ExpandListColumn(#"Expanded visual.query.queryState.Values", "visual.query.queryState.Values.projections"),
+		    #"Expanded visual.query.queryState.Values.projections1" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections", "visual.query.queryState.Values.projections", {"field", "queryRef", "nativeQueryRef"}, {"visual.query.queryState.Values.projections.field", "visual.query.queryState.Values.projections.queryRef", "visual.query.queryState.Values.projections.nativeQueryRef"}),
+		    #"Expanded visual.query.queryState.Values.projections.field" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections1", "visual.query.queryState.Values.projections.field", {"Measure"}, {"visual.query.queryState.Values.projections.field.Measure"}),
+		    #"Expanded visual.query.queryState.Values.projections.field.Measure" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections.field", "visual.query.queryState.Values.projections.field.Measure", {"Expression", "Property"}, {"visual.query.queryState.Values.projections.field.Measure.Expression", "visual.query.queryState.Values.projections.field.Measure.Property"}),
+		    #"Expanded visual.query.queryState.Values.projections.field.Measure.Expression" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections.field.Measure", "visual.query.queryState.Values.projections.field.Measure.Expression", {"SourceRef"}, {"visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef"}),
+		    #"Expanded visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Values.projections.field.Measure.Expression", "visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef", {"Entity"}, {"visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef.En"}),
+		    #"Removed Columns4" = Table.RemoveColumns(#"Expanded visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef",{"visual.query.queryState.Values.projections.field.Measure.Expression.SourceRef.En", "visual.query.queryState.Values.projections.field.Measure.Property"}),
+		    #"Renamed Columns3" = Table.RenameColumns(#"Removed Columns4",{{"visual.query.queryState.Values.projections.queryRef", "Column Source Ref"}}),
+		    #"Removed Columns5" = Table.RemoveColumns(#"Renamed Columns3",{"visual.query.queryState.Values.projections.nativeQueryRef", "filterConfig.filters.name"}),
+		    #"Renamed Columns4" = Table.RenameColumns(#"Removed Columns5",{{"filterConfig.filters.field.Column.Expression.SourceRef.Entity", "Filter Config Table Source"}, {"filterConfig.filters.field.Column.Property", "Filter Config Table Source Column"}, {"Column Source Ref", "Measure Source Ref"}, {"VisualType", "Visual Type"}}),
+		    #"Removed Columns3" = Table.RemoveColumns(#"Renamed Columns4",{"visual.visualContainerObjects.title.properties.show.expr.Literal.Value"}),
+		    #"Renamed Columns5" = Table.RenameColumns(#"Removed Columns3",{{"visual.visualContainerObjects.title.properties.text.expr.Literal.Value", "Visual Title"}}),
+		    #"Removed Columns6" = Table.RemoveColumns(#"Renamed Columns5",{"visual.drillFilterOtherVisuals"}),
+		    #"Renamed Columns6" = Table.RenameColumns(#"Removed Columns6",{{"Measure Source Ref", "Measures Source Ref"}})
+		in
+		    #"Renamed Columns6"
+	lineageTag: 211a341d-c2bb-42b2-93a0-e856fcd6da7a
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression cardVisual =
+		let
+		    Source = Folder.Files(ReportFilePath),
+		    #"Filtered Rows" = Table.SelectRows(Source, each ([Name] = "visual.json")),
+		    #"Filtered Hidden Files1" = Table.SelectRows(#"Filtered Rows", each [Attributes]?[Hidden]? <> true),
+		    #"Invoke Custom Function1" = Table.AddColumn(#"Filtered Hidden Files1", "Transform File", each #"Transform File"([Content])),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Invoke Custom Function1", {"Name", "Source.Name"}),
+		    #"Removed Other Columns1" = Table.SelectColumns(#"Renamed Columns1", {"Source.Name", "Transform File","Folder Path"}),
+		    #"Expanded Table Column1" = Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File", Table.ColumnNames(#"Transform File"(#"Sample File"))),
+		    #"Expanded filterConfig" = Table.ExpandRecordColumn(#"Expanded Table Column1", "filterConfig", {"filters"}, {"filterConfig.filters"}),
+		    #"Expanded filterConfig.filters" = Table.ExpandListColumn(#"Expanded filterConfig", "filterConfig.filters"),
+		    #"Expanded filterConfig.filters1" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters", "filterConfig.filters", {"name", "field", "filter"}, {"filterConfig.filters.name", "filterConfig.filters.field", "filterConfig.filters.filter"}),
+		    #"Expanded filterConfig.filters.field" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters1", "filterConfig.filters.field", {"Column"}, {"filterConfig.filters.field.Column"}),
+		    #"Expanded filterConfig.filters.field.Column" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field", "filterConfig.filters.field.Column", {"Expression", "Property"}, {"filterConfig.filters.field.Column.Expression", "filterConfig.filters.field.Column.Property"}),
+		    #"Expanded filterConfig.filters.field.Column.Expression" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field.Column", "filterConfig.filters.field.Column.Expression", {"SourceRef"}, {"filterConfig.filters.field.Column.Expression.SourceRef"}),
+		    #"Expanded filterConfig.filters.field.Column.Expression.SourceRef" = Table.ExpandRecordColumn(#"Expanded filterConfig.filters.field.Column.Expression", "filterConfig.filters.field.Column.Expression.SourceRef", {"Entity"}, {"filterConfig.filters.field.Column.Expression.SourceRef.Entity"}),
+		    #"Removed Columns" = Table.RemoveColumns(#"Expanded filterConfig.filters.field.Column.Expression.SourceRef",{"filterConfig.filters.filter", "$schema"}),
+		    #"Expanded visual.visualContainerObjects" = Table.ExpandRecordColumn(#"Removed Columns", "visual.visualContainerObjects", {"title"}, {"visual.visualContainerObjects.title"}),
+		    #"Expanded visual.visualContainerObjects.title" = Table.ExpandListColumn(#"Expanded visual.visualContainerObjects", "visual.visualContainerObjects.title"),
+		    #"Expanded visual.visualContainerObjects.title1" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title", "visual.visualContainerObjects.title", {"properties"}, {"visual.visualContainerObjects.title.properties"}),
+		    #"Expanded visual.visualContainerObjects.title.properties" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title1", "visual.visualContainerObjects.title.properties", {"show", "text"}, {"visual.visualContainerObjects.title.properties.show", "visual.visualContainerObjects.title.properties.text"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties", "visual.visualContainerObjects.title.properties.show", {"expr"}, {"visual.visualContainerObjects.title.properties.show.expr"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show", "visual.visualContainerObjects.title.properties.text", {"expr"}, {"visual.visualContainerObjects.title.properties.text.expr"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text.expr" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text", "visual.visualContainerObjects.title.properties.text.expr", {"Literal"}, {"visual.visualContainerObjects.title.properties.text.expr.Literal"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show.expr" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text.expr", "visual.visualContainerObjects.title.properties.show.expr", {"Literal"}, {"visual.visualContainerObjects.title.properties.show.expr.Literal"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.show.expr.Literal" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show.expr", "visual.visualContainerObjects.title.properties.show.expr.Literal", {"Value"}, {"visual.visualContainerObjects.title.properties.show.expr.Literal.Value"}),
+		    #"Expanded visual.visualContainerObjects.title.properties.text.expr.Literal" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.show.expr.Literal", "visual.visualContainerObjects.title.properties.text.expr.Literal", {"Value"}, {"visual.visualContainerObjects.title.properties.text.expr.Literal.Value"}),
+		    #"Expanded visual.query" = Table.ExpandRecordColumn(#"Expanded visual.visualContainerObjects.title.properties.text.expr.Literal", "visual.query", {"queryState"}, {"visual.query.queryState"}),
+		    #"Filtered Rows1" = Table.SelectRows(#"Expanded visual.query", each ([visual.visualType] = "cardVisual")),
+		    #"Removed Columns1" = Table.RemoveColumns(#"Filtered Rows1",{"Source.Name"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns1",{{"name", "VisualID"}}),
+		    #"Removed Columns2" = Table.RemoveColumns(#"Renamed Columns",{"position"}),
+		    #"Expanded visual.query.queryState" = Table.ExpandRecordColumn(#"Removed Columns2", "visual.query.queryState", {"Data"}, {"visual.query.queryState.Data"}),
+		    #"Expanded visual.query.queryState.Data" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState", "visual.query.queryState.Data", {"projections"}, {"visual.query.queryState.Data.projections"}),
+		    #"Expanded visual.query.queryState.Data.projections" = Table.ExpandListColumn(#"Expanded visual.query.queryState.Data", "visual.query.queryState.Data.projections"),
+		    #"Expanded visual.query.queryState.Data.projections1" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Data.projections", "visual.query.queryState.Data.projections", {"field", "queryRef", "nativeQueryRef"}, {"visual.query.queryState.Data.projections.field", "visual.query.queryState.Data.projections.queryRef", "visual.query.queryState.Data.projections.nativeQueryRef"}),
+		    #"Expanded visual.query.queryState.Data.projections.field" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Data.projections1", "visual.query.queryState.Data.projections.field", {"Measure"}, {"visual.query.queryState.Data.projections.field.Measure"}),
+		    #"Expanded visual.query.queryState.Data.projections.field.Measure" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Data.projections.field", "visual.query.queryState.Data.projections.field.Measure", {"Expression", "Property"}, {"visual.query.queryState.Data.projections.field.Measure.Expression", "visual.query.queryState.Data.projections.field.Measure.Property"}),
+		    #"Expanded visual.query.queryState.Data.projections.field.Measure.Expression" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Data.projections.field.Measure", "visual.query.queryState.Data.projections.field.Measure.Expression", {"SourceRef"}, {"visual.query.queryState.Data.projections.field.Measure.Expression.SourceRef"}),
+		    #"Expanded visual.query.queryState.Data.projections.field.Measure.Expression.SourceRef" = Table.ExpandRecordColumn(#"Expanded visual.query.queryState.Data.projections.field.Measure.Expression", "visual.query.queryState.Data.projections.field.Measure.Expression.SourceRef", {"Entity"}, {"visual.query.queryState.Data.projections.field.Measure.Expression.SourceRef.Enti"}),
+		    #"Removed Columns3" = Table.RemoveColumns(#"Expanded visual.query.queryState.Data.projections.field.Measure.Expression.SourceRef",{"visual.query.queryState.Data.projections.field.Measure.Expression.SourceRef.Enti", "visual.query.queryState.Data.projections.field.Measure.Property", "visual.query.queryState.Data.projections.nativeQueryRef", "visual.visualContainerObjects.title.properties.show.expr.Literal.Value"}),
+		    #"Renamed Columns2" = Table.RenameColumns(#"Removed Columns3",{{"visual.visualContainerObjects.title.properties.text.expr.Literal.Value", "Visual Title"}}),
+		    #"Removed Columns4" = Table.RemoveColumns(#"Renamed Columns2",{"visual.drillFilterOtherVisuals", "filterConfig.filters.name"}),
+		    #"Renamed Columns3" = Table.RenameColumns(#"Removed Columns4",{{"filterConfig.filters.field.Column.Expression.SourceRef.Entity", "Filter Config Table Source"}, {"filterConfig.filters.field.Column.Property", "Filter Config Table Source Column"}, {"visual.query.queryState.Data.projections.queryRef", "Measures Source Ref"}, {"visual.visualType", "Visual Type"}})
+		in
+		    #"Renamed Columns3"
+	lineageTag: 91ba0ff2-8141-48b2-b6d6-9d755706d0dd
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
