@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
-  "name": "d80103dbcb89a57971b4",
+  "name": "334f46e3aa438a71050c",
   "position": {
     "x": 0,
     "y": 80,
-    "z": 1,
+    "z": 1000,
     "height": 640,
     "width": 1280,
-    "tabOrder": 1
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "tableEx",
@@ -98,6 +98,48 @@
               },
               "queryRef": "pages.Visual Query Reference",
               "nativeQueryRef": "Visual Query Reference"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CombinedTable"
+                    }
+                  },
+                  "Property": "Columns Source Ref"
+                }
+              },
+              "queryRef": "CombinedTable.Columns Source Ref",
+              "nativeQueryRef": "Columns Source Ref"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CombinedTable"
+                    }
+                  },
+                  "Property": "Rows Source Ref"
+                }
+              },
+              "queryRef": "CombinedTable.Rows Source Ref",
+              "nativeQueryRef": "Rows Source Ref"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CombinedTable"
+                    }
+                  },
+                  "Property": "Measures Source Ref"
+                }
+              },
+              "queryRef": "CombinedTable.Measures Source Ref",
+              "nativeQueryRef": "Measures Source Ref"
             }
           ]
         }

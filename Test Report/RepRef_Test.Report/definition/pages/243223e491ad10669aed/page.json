@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
-  "name": "bbdba3356e3da670bb79",
-  "displayName": "Distinct Ref to Page",
+  "name": "243223e491ad10669aed",
+  "displayName": "Visuals by Page - Details",
   "displayOption": "FitToPage",
   "height": 720,
   "width": 1280,

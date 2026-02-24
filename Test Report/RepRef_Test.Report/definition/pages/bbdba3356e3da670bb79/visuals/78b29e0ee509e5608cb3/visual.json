@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
-  "name": "771451a5a83208a1315e",
+  "name": "78b29e0ee509e5608cb3",
   "position": {
-    "x": 0,
-    "y": 288,
-    "z": 2,
-    "height": 432,
-    "width": 352,
-    "tabOrder": 2
+    "x": 608,
+    "y": 0,
+    "z": 4,
+    "height": 720,
+    "width": 320,
+    "tabOrder": 4
   },
   "visual": {
     "visualType": "tableEx",
@@ -20,17 +20,34 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "CombinedTable"
+                      "Entity": "pages"
                     }
                   },
-                  "Property": "Rows Source Ref"
+                  "Property": "Visual Query Reference"
                 }
               },
-              "queryRef": "CombinedTable.Rows Source Ref",
-              "nativeQueryRef": "Rows Source Ref"
+              "queryRef": "pages.Visual Query Reference",
+              "nativeQueryRef": "Visual Query Reference"
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "pages"
+                  }
+                },
+                "Property": "Visual Query Reference"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
       }
     },
     "visualContainerObjects": {

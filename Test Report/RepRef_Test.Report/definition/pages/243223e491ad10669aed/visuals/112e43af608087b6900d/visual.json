@@ -1,16 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
-  "name": "771451a5a83208a1315e",
+  "name": "112e43af608087b6900d",
   "position": {
     "x": 0,
-    "y": 288,
-    "z": 2,
-    "height": 432,
-    "width": 352,
-    "tabOrder": 2
+    "y": 0,
+    "z": 0,
+    "height": 80,
+    "width": 640,
+    "tabOrder": 0
   },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "slicer",
     "query": {
       "queryState": {
         "Values": {
@@ -20,31 +20,37 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "CombinedTable"
+                      "Entity": "Page Information"
                     }
                   },
-                  "Property": "Rows Source Ref"
+                  "Property": "Page Name"
                 }
               },
-              "queryRef": "CombinedTable.Rows Source Ref",
-              "nativeQueryRef": "Rows Source Ref"
+              "queryRef": "Page Information.Page Name",
+              "nativeQueryRef": "Page Name",
+              "active": true
             }
           ]
         }
       }
     },
-    "visualContainerObjects": {
-      "background": [
+    "objects": {
+      "data": [
         {
           "properties": {
-            "show": {
+            "mode": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "'Dropdown'"
                 }
               }
             }
           }
+        }
+      ],
+      "general": [
+        {
+          "properties": {}
         }
       ]
     },

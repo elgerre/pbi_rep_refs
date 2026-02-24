@@ -5,8 +5,8 @@
     "x": 352,
     "y": 0,
     "z": 3,
-    "height": 704,
-    "width": 320,
+    "height": 720,
+    "width": 256,
     "tabOrder": 3
   },
   "visual": {
@@ -32,6 +32,21 @@
           ]
         }
       }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "drillFilterOtherVisuals": true
   }
